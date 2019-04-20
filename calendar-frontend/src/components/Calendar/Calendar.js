@@ -1,14 +1,38 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Toolbar from './Toolbar';
 import Month from './Month';
+import { EventType } from './Event';
 import { CALENDAR_TYPE } from '../../utils/enums';
 import './Calendar.scss';
 
 export default class Calendar extends Component {
-  state = {
+  static propTypes = {
+    type: PropTypes.oneOf([CALENDAR_TYPE.month, CALENDAR_TYPE.week]),
+    events: PropTypes.arrayOf(PropTypes.shape(EventType)),
+    onClickEvent: PropTypes.func
+  }
+
+  static defaultProps = {
     type: CALENDAR_TYPE.month,
-    year: 2019,
-    month: 3 // index (real, month: 4)
+    events: null
+  }
+
+  constructor(props) {
+    super(props);
+
+    const today = new Date();
+    this.state = {
+      type: props.type,
+      year: today.getFullYear(),
+      month: today.getMonth() // index (real, month: index + 1)
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.type !== nextProps.type) {
+      this.setState({ type: nextProps.type });
+    }
   }
 
   handleChangeNav = (year, month) => {
@@ -20,6 +44,7 @@ export default class Calendar extends Component {
   }
 
   render() {
+    const { events, onClickEvent } = this.props;
     const { type, year, month } = this.state;
     return (
       <div className="mini-calendar">
@@ -35,7 +60,7 @@ export default class Calendar extends Component {
         />
         { type === CALENDAR_TYPE.month
           ? (
-            <Month year={year} month={month} />
+            <Month year={year} month={month} events={events} onClickEvent={onClickEvent} />
           ) : null
         }
       </div>
