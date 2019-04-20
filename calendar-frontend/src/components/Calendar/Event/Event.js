@@ -16,7 +16,7 @@ const Event = ({
   return (
     <div className="mc-segment">
       <button className="mc-event" onClick={handleClick}>
-        <div title={title}>{hours}시 {title}</div>
+        <div className="mc-event-content" title={title}>{hours}시 {title}</div>
       </button>
     </div>
   );
