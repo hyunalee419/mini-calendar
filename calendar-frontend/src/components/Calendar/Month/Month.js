@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Header from '../Header';
 import DayRow from './DayRow/DayRow';
 import Day from './Day';
+import './Month.scss';
 import {
   beforeDaysInMonth, daysInMonth, firstDayInMonth
 } from '../../../utils/dates';
@@ -43,7 +44,7 @@ export default class Month extends Component {
       _contents.push(<DayRow>{_cols}</DayRow>);
     }
     return (
-      <div>
+      <div className="mc-month-view">
         <Header />
         {_contents}
       </div>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Toolbar from './Toolbar';
 import Month from './Month';
 import { CALENDAR_TYPE } from '../../utils/enums';
+import './Calendar.scss';
 
 export default class Calendar extends Component {
   state = {
@@ -21,7 +22,7 @@ export default class Calendar extends Component {
   render() {
     const { type, year, month } = this.state;
     return (
-      <div>
+      <div className="mini-calendar">
         <Toolbar
           type={type}
           year={year}
