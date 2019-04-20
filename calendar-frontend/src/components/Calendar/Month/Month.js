@@ -41,7 +41,7 @@ export default class Month extends Component {
     const _contents = [];
     let day = 1
       , currDate;
-    for (let i = 0; day < Days; i += 7) {
+    for (let i = 0; day <= Days; i += 7) {
       const _cols = [];
       for (let j = i; j < i + 7; j++) {
         let date
