@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import Header from './Header/Header';
-import { CALENDAR_TYPE } from "../../modules/enums";
+import Toolbar from './Toolbar';
+import Month from './Month';
+import { CALENDAR_TYPE } from '../../utils/enums';
 
 export default class Calendar extends Component {
   state = {
     type: CALENDAR_TYPE.month,
     year: 2019,
-    month: 4 // index
+    month: 3 // index (real, month: 4)
   }
 
   handleChangeNav = (year, month) => {
@@ -21,7 +22,7 @@ export default class Calendar extends Component {
     const { type, year, month } = this.state;
     return (
       <div>
-        <Header
+        <Toolbar
           type={type}
           year={year}
           month={month}
@@ -31,7 +32,11 @@ export default class Calendar extends Component {
           onClickMonth={this.handleChangeCalendarType}
           onClickWeek={this.handleChangeCalendarType}
         />
-        <div>calendar {type}</div>
+        { type === CALENDAR_TYPE.month
+          ? (
+            <Month year={year} month={month} />
+          ) : null
+        }
       </div>
     )
   }
