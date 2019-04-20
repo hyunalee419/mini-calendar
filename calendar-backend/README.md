@@ -3,8 +3,8 @@ This project is backend for [mini-calendar](https://github.com/hyunalee419/mini-
 
 ## How to set
 ```
-python3 manage.py makemigrations --settings=base.settings.dev
-python3 manage.py migrate --settings=base.settings.dev
+python3 manage.py makemigrations event --settings=base.settings.dev
+python3 manage.py migrate event --settings=base.settings.dev
 ```
 
 ## Run Server
