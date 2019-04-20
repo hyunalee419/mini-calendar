@@ -4,8 +4,8 @@ from .views import events, event_detail
 
 
 urlpatterns = [
-    path('events/', events),
-    path('events/<int:pk>', event_detail),
+    path('', events),
+    path('/<int:pk>', event_detail),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
