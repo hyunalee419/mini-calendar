@@ -1,0 +1,27 @@
+.mc-event-modal {
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 580px;
+  height: 200px;
+  outline: none;
+
+  .btn-group {
+    position: absolute;
+    left: 0;
+    bottom: 5px;
+    padding-top: 5px;
+    width: 100%;
+    text-align: center;
+    border-top: 1px solid #ddd;
+
+    .mini-calendar-button.danger {
+      position: absolute;
+      left: 10px;
+    }
+  }
+}
