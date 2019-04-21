@@ -8,7 +8,8 @@ const Event = ({
   end,
   onClick
 }) => {
-  function handleClick() {
+  function handleClick(e) {
+    e.stopPropagation();
     if (onClick) onClick(title, start, end);
   }
 
