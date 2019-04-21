@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './Event.scss';
 
 const Event = ({
+  id,
   title,
   start,
   end,
@@ -10,7 +11,7 @@ const Event = ({
 }) => {
   function handleClick(e) {
     e.stopPropagation();
-    if (onClick) onClick(title, start, end);
+    if (onClick) onClick({ id, title, start, end });
   }
 
   const hours = new Date(start).getHours();
@@ -24,6 +25,7 @@ const Event = ({
 }
 
 export const EventType = {
+  id: PropTypes.number,
   title: PropTypes.string.isRequired,
   start: PropTypes.string.isRequired,
   end: PropTypes.string.isRequired,

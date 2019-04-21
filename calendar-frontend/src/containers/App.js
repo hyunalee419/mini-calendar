@@ -34,9 +34,9 @@ class App extends Component {
     this.setState({ isModal: true });
   }
 
-  handleClickEvent = (title, start, end) => {
+  handleClickEvent = ({ id, title, start, end }) => {
     this.event = {
-      title, start, end
+      id, title, start, end
     }
     this.setState({ isModal: true });
   }
@@ -49,16 +49,36 @@ class App extends Component {
     });
   }
 
-  handleSubmit = async (values) => {
+  handleDelete = (event) => {
     try {
-      const response = await axios.post(`${API_HOST}/events`, values);
-      console.log(response);
+      axios.delete(`${API_HOST}/events/${event.id}`);
+      // TODO: change toast
+      alert('성공적으로 삭제되었습니다.');
+
+      const { events } = this.state;
+      this.setState({
+        isModal: false,
+        events: events.filter((item) => item.id !== event.id)
+      })
+    } catch (e) {
+      alert(e.toString())
+    }
+  }
+
+  handleSubmit = async (values) => {
+    this.clickDay = this.event = undefined;
+
+    try {
+      await axios.post(`${API_HOST}/events`, values);
+      // TODO: change toast
+      alert('성공적으로 저장되었습니다.');
+
+      const { events } = this.state;
+      events.push(values);
+      this.setState({ isModal: false, events: events.slice() });
     } catch (e) {
       alert(e.toString());
     }
-    this.setState({ isModal: false });
-    this.getEvents(); // todo: insert item list
-    this.clickDay = this.event = undefined;
   }
 
   render() {
@@ -77,6 +97,7 @@ class App extends Component {
             event={this.event}
             date={this.clickDay}
             onClose={this.handleCancel}
+            onDelete={this.handleDelete}
             onSubmit={this.handleSubmit}
           />
         )}

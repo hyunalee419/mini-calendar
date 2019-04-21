@@ -14,4 +14,25 @@
     background-color: #e6e6e6;
     border-color: #adadad;
   }
+
+  &.primary {
+    color: #fff;
+    background-color: #1890ff;
+    border-color: #1890ff;
+
+    &:hover, &:active {
+      background-color: #40a9ff;
+      border-color: #40a9ff;
+    }
+  }
+
+  &.danger {
+    color: red;
+
+    &:hover, &.active {
+      background-color: #ff4d4f;
+      border-color: #ff4d4f;
+      color: #fff;
+    }
+  }
 }

@@ -14,6 +14,7 @@ export default class EventFormModal extends Component {
     event: PropTypes.shape(EventType),
     date: PropTypes.objectOf(Date),
     onClose: PropTypes.func,
+    onDelete: PropTypes.func,
     onSubmit: PropTypes.func
   }
 
@@ -32,6 +33,13 @@ export default class EventFormModal extends Component {
 
     const { onSubmit } = this.props;
     if (onSubmit) onSubmit({ title, start, end });
+  }
+
+  handleDelete = (e) => {
+    e.preventDefault();
+
+    const { event, onDelete } = this.props;
+    if (onDelete) onDelete(event);
   }
 
   render() {
@@ -98,8 +106,10 @@ export default class EventFormModal extends Component {
             />
           </div>
           <div className="btn-group">
-            <Button onClick={onClose}>close</Button>
-            <Button className="ml-5" type="submit">ok</Button>
+            { event && <Button buttonType="danger" onClick={this.handleDelete}>삭제</Button> }
+
+            <Button onClick={onClose}>취소</Button>
+            <Button className="ml-5" buttonType="primary" type="submit">저장</Button>
           </div>
         </form>
       </Modal>
