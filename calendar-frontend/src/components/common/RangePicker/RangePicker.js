@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from '../DatePicker';
+import TimePicker from '../TimePicker';
 import './RangePicker.scss';
 
 export default class RangePicker extends Component {
@@ -13,7 +14,15 @@ export default class RangePicker extends Component {
     startProps: PropTypes.any,
     endProps: PropTypes.any,
     className: PropTypes.string,
-    style: PropTypes.any
+    style: PropTypes.any,
+
+    isTime: PropTypes.bool,
+    startTimeValue: PropTypes.string,
+    startTimeDefaultValue: PropTypes.string,
+    endTimeValue: PropTypes.string,
+    endTimeDefaultValue: PropTypes.string,
+    startTimeProps: PropTypes.any,
+    endTimeProps: PropTypes.any
   }
 
   static defaultProps = {
@@ -22,42 +31,61 @@ export default class RangePicker extends Component {
     endValue: undefined,
     endDefaultValue: undefined,
     className: '',
-    style: undefined
+    style: undefined,
+    isTime: false
   }
 
-  startValue;
-  endValue;
+  startValue = undefined;
+  endValue = undefined;
+  startTimeValue = undefined;
+  endTimeValue = undefined;
 
   constructor(props) {
     super(props);
 
     const startValue = props.startDefaultValue ? props.startDefaultValue : ''
-      , endValue = props.endDefaultValue ? props.endDefaultValue : '';
+      , endValue = props.endDefaultValue ? props.endDefaultValue : ''
+      , startTimeValue = props.startTimeDefaultValue ? props.startTimeDefaultValue : ''
+      , endTimeValue = props.endTimeDefaultValue ? props.endTimeDefaultValue : '';
 
-    this.state = { startValue, endValue };
+    this.state = { startValue, endValue, startTimeValue, endTimeValue };
 
     this.startValue = startValue || props.startValue;
     this.endValue = endValue || props.endValue;
+    this.startTimeValue = startTimeValue || props.startTimeValue;
+    this.endTimeValue = endTimeValue || props.endTimeDefaultValue;
   }
 
   handleChange = (type) => (e) => {
-    const { onChange, startDefaultValue, endDefaultValue } = this.props;
+    const {
+      onChange, startDefaultValue, endDefaultValue, startTimeDefaultValue, endTimeDefaultValue
+    } = this.props;
     const { value } = e.target;
 
     this[`${type}Value`] = value;
+
+    let start = `${this.startValue} ${this.startTimeValue}`
+      , end = `${this.endValue} ${this.endTimeValue}`;
+
     switch (type) {
       case 'start':
-        if ( this.endValue && value > this.endValue ) {
+      case 'startTime':
+        if ( end && start >= end ) {
           this.endValue = this.startValue;
+          this.endTimeValue = this.startTimeValue;
         } else {
-          this.startValue = value;
+          this.startValue = start.slice(0, 10);
+          this.startTimeValue = start.slice(11);
         }
         break;
       case 'end':
-        if ( this.startValue && value < this.startValue ) {
+      case 'endTime':
+        if ( start && end <= start ) {
           this.startValue = this.endValue;
+          this.startTimeValue = this.endTimeValue;
         } else {
-          this.endValue = value;
+          this.endValue = end.slice(0, 10);
+          this.endTimeValue = end.slice(11);
         }
         break;
     }
@@ -65,17 +93,30 @@ export default class RangePicker extends Component {
     if ( onChange ) {
       onChange(this.startValue, this.endValue);
     }
-    if ( startDefaultValue || endDefaultValue ) {
-      this.setState({ startValue: this.startValue, endValue: this.endValue });
+    if ( startDefaultValue || endDefaultValue || startTimeDefaultValue, endTimeDefaultValue ) {
+      this.setState({
+        startValue: this.startValue,
+        endValue: this.endValue,
+        startTimeValue: this.startTimeValue,
+        endTimeValue: this.endTimeValue
+      });
     }
   }
 
   render() {
     const {
       startValue, endValue, startDefaultValue, endDefaultValue,
-      startProps, endProps, className, style
+      startProps, endProps,
+      startTimeValue, endTimeValue, startTimeDefaultValue, endTimeDefaultValue,
+      startTimeProps, endTimeProps,
+      className, style, isTime
     } = this.props;
-    const { startValue: stateStartValue, endValue: stateEndValue } = this.state;
+    const {
+      startValue: stateStartValue,
+      endValue: stateEndValue,
+      startTimeValue: stateStartTimeValue,
+      endTimeValue: stateEndTimeValue
+    } = this.state;
 
     return (
       <div className={`mc-rangepicker ${className}`} style={style}>
@@ -84,11 +125,25 @@ export default class RangePicker extends Component {
           onChange={this.handleChange('start')}
           {...startProps}
         />
+        { isTime && (
+          <TimePicker
+            value={ (startTimeDefaultValue || !startTimeValue) ? stateStartTimeValue: startTimeValue }
+            onChange={this.handleChange('startTime')}
+            {...startTimeProps}
+          />
+        )}
         <DatePicker
           value={ (endDefaultValue || !endValue) ? stateEndValue : endValue }
           onChange={this.handleChange('end')}
           {...endProps}
         />
+        { isTime && (
+          <TimePicker
+            value={ (endTimeDefaultValue || !endTimeValue) ? stateEndTimeValue: endTimeValue }
+            onChange={this.handleChange('endTime')}
+            {...endTimeProps}
+          />
+        )}
       </div>
     )
   }
