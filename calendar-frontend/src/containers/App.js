@@ -50,6 +50,8 @@ class App extends Component {
   }
 
   handleDelete = (event) => {
+    this.clickDay = this.event = undefined;
+
     try {
       axios.delete(`${API_HOST}/events/${event.id}`);
       // TODO: change toast

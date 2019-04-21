@@ -52,16 +52,16 @@ export default class Month extends Component {
         if (j === FirstDay || (day > 1 && day <= Days)) {
           date = day;
           day++;
-          currDate = new Date(year, month, date + 1);
+          currDate = new Date(year, month, date);
         } else if (day <= 1) {
           date = BeforeDays - FirstDay - (-j) + 1;
           isOff = true;
-          currDate = new Date(year, month - 1, date + 1);
+          currDate = new Date(year, month - 1, date);
         } else {
           date = day - Days;
           day++;
           isOff = true;
-          currDate = new Date(year, month + 1, date + 1);
+          currDate = new Date(year, month + 1, date);
         }
 
         const dayEvents = events && events.filter((event) => {
