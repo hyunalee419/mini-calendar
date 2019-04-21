@@ -65,16 +65,34 @@ class App extends Component {
     }
   }
 
-  handleSubmit = async (values) => {
+  handleSubmit = async (data) => {
+    const method = this.event ? 'PUT' : 'POST'
+      , id = this.event ? this.event.id : '';
     this.clickDay = this.event = undefined;
 
     try {
-      await axios.post(`${API_HOST}/events`, values);
+      await axios({
+        method,
+        url: `${API_HOST}/events${method === 'PUT' ? `/${id}` : ''}`,
+        data
+      });
       // TODO: change toast
       alert('성공적으로 저장되었습니다.');
 
       const { events } = this.state;
-      events.push(values);
+      if ( method === 'POST' ) {
+        events.push(data);
+      } else {
+        for (let i = 0; events && i < events.length; i++) {
+          if (events[i].id === id) {
+            events[i] = {
+              id,
+              ...data
+            };
+            break;
+          }
+        }
+      }
       this.setState({ isModal: false, events: events.slice() });
     } catch (e) {
       alert(e.toString());
