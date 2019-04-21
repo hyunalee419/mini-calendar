@@ -85,7 +85,10 @@ class App extends Component {
       } else {
         for (let i = 0; events && i < events.length; i++) {
           if (events[i].id === id) {
-            events[i] = data;
+            events[i] = {
+              id,
+              ...data
+            };
             break;
           }
         }
