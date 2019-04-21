@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Calendar from 'components/Calendar';
 import EventFormModal from 'components/EventFormModal';
+import moment from "moment-timezone";
 
 const API_HOST = 'http://localhost:8000';
 
@@ -29,6 +30,20 @@ class App extends Component {
     }
   }
 
+  updateStateEvent = (id, data) => {
+    const { events } = this.state;
+    for (let i = 0; events && i < events.length; i++) {
+      if (events[i].id === id) {
+        events[i] = {
+          id,
+          ...data
+        };
+        break;
+      }
+    }
+    return events;
+  }
+
   handleClickDay = (year, month, date) => {
     this.clickDay = new Date(year, month, date);
     this.setState({ isModal: true });
@@ -39,6 +54,26 @@ class App extends Component {
       id, title, start, end
     }
     this.setState({ isModal: true });
+  }
+
+  handleDropEvent = (event, date) => {
+    const timezoneOffset = new Date().getTimezoneOffset() * 60000;
+    date = new Date(date - timezoneOffset);
+
+    const yyyymmdd = date.toISOString().slice(0, 10);
+    event.start = moment.tz(`${yyyymmdd} ${event.start.slice(11, 16)}`, 'Asia/Seoul').format();
+    event.end = moment.tz(`${yyyymmdd} ${event.end.slice(11, 16)}`, 'Asia/Seoul').format();
+
+    try {
+      axios.put(`${API_HOST}/events/${event.id}`, event);
+      alert("성공적으로 저장되었습니다.");
+
+      const { id, ...data } = event;
+      const events = this.updateStateEvent(id, data);
+      this.setState({ events: events.slice() });
+    } catch (e) {
+      alert(e.toString());
+    }
   }
 
   handleCancel = (e) => {
@@ -81,19 +116,11 @@ class App extends Component {
       // TODO: change toast
       alert('성공적으로 저장되었습니다.');
 
-      const { events } = this.state;
+      let { events } = this.state;
       if ( method === 'POST' ) {
         events.push(data);
       } else {
-        for (let i = 0; events && i < events.length; i++) {
-          if (events[i].id === id) {
-            events[i] = {
-              id,
-              ...data
-            };
-            break;
-          }
-        }
+        events = this.updateStateEvent(id, data);
       }
       this.setState({ isModal: false, events: events.slice() });
     } catch (e) {
@@ -109,6 +136,7 @@ class App extends Component {
           events={events}
           onClickDay={this.handleClickDay}
           onClickEvent={this.handleClickEvent}
+          onDropEvent={this.handleDropEvent}
         />
 
         { isModal && (
