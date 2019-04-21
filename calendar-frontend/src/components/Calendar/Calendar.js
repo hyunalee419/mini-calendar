@@ -10,6 +10,7 @@ export default class Calendar extends Component {
   static propTypes = {
     type: PropTypes.oneOf([CALENDAR_TYPE.month, CALENDAR_TYPE.week]),
     events: PropTypes.arrayOf(PropTypes.shape(EventType)),
+    onClickDay: PropTypes.func,
     onClickEvent: PropTypes.func
   }
 
@@ -44,7 +45,7 @@ export default class Calendar extends Component {
   }
 
   render() {
-    const { events, onClickEvent } = this.props;
+    const { events, onClickDay, onClickEvent } = this.props;
     const { type, year, month } = this.state;
     return (
       <div className="mini-calendar">
@@ -60,7 +61,7 @@ export default class Calendar extends Component {
         />
         { type === CALENDAR_TYPE.month
           ? (
-            <Month year={year} month={month} events={events} onClickEvent={onClickEvent} />
+            <Month year={year} month={month} events={events} onClickDay={onClickDay} onClickEvent={onClickEvent} />
           ) : null
         }
       </div>

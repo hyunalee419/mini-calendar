@@ -14,6 +14,7 @@ export default class Month extends Component {
     year: PropTypes.number.isRequired,
     month: PropTypes.number.isRequired, // month index
     events: PropTypes.arrayOf(PropTypes.shape(EventType)),
+    onClickDay: PropTypes.func,
     onClickEvent: PropTypes.func
   }
 
@@ -31,12 +32,14 @@ export default class Month extends Component {
   }
 
   renderContents = () => {
-    const { year, month, onClickEvent } = this.props;
+    const { year, month, onClickDay, onClickEvent } = this.props;
     const Days = daysInMonth(year, month)
       , FirstDay = firstDayInMonth(year, month)
       , BeforeDays = beforeDaysInMonth(year, month);
 
     const events = this.filterEvents();
+
+    const handleClickDay = (date) => onClickDay(year, month, date);
 
     const _contents = [];
     let day = 1
@@ -65,7 +68,18 @@ export default class Month extends Component {
           const start = new Date(event.start);
           return start.toISOString().slice(0, 10) === currDate.toISOString().slice(0, 10);
         });
-        _cols.push(<Day key={`day-${date}`} year={currDate.getFullYear()} month={currDate.getMonth()} date={date} events={dayEvents} onClickEvent={onClickEvent} isOff={isOff} />)
+        _cols.push(
+          <Day
+            key={`day-${date}`}
+            year={currDate.getFullYear()}
+            month={currDate.getMonth()}
+            date={date}
+            events={dayEvents}
+            onClick={handleClickDay}
+            onClickEvent={onClickEvent}
+            isOff={isOff}
+          />
+        );
       }
       _contents.push(<DayRow key={`day-row-${i/7}`}>{_cols}</DayRow>);
     }

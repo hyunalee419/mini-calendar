@@ -11,7 +11,7 @@ def events(request):
     List all code snippets, or create a new snippet.
     """
     if request.method == 'GET':
-        events = Event.objects.all()
+        events = Event.objects.all().order_by('start')
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
 
