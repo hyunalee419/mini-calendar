@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from "moment";
 import Modal from 'react-modal';
-import DateTime from 'react-datetime';
 import Button from 'components/common/Button';
+import Input from 'components/common/Input';
+import RangePicker from "../common/RangePicker/RangePicker";
 import { EventType } from "../Calendar/Event";
-import 'react-datetime/css/react-datetime.css';
 import './EventFormModal.scss';
 
 export default class EventFormModal extends Component {
@@ -23,11 +24,11 @@ export default class EventFormModal extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    let { title, start, end } = e.target;
+    let { title, startDate, startTime, endDate, endTime } = e.target;
 
     title = title.value;
-    start = start.value;
-    end = end.value;
+    let start = `${startDate.value} ${startTime.value}`;
+    let end = `${endDate.value} ${endTime.value}`;
 
     const { onSubmit } = this.props;
     if (onSubmit) onSubmit({ title, start, end });
@@ -51,7 +52,6 @@ export default class EventFormModal extends Component {
     return (
       <Modal
         className="mc-event-modal"
-        // overlayClassName="mc-event-modal-overlay"
         isOpen={isOpen}
         onRequestClose={onClose}
         contentLabel={contentLabel}
@@ -59,28 +59,42 @@ export default class EventFormModal extends Component {
         <h3>{ contentLabel }</h3>
         <hr />
         <form onSubmit={this.handleSubmit}>
-          <div>
-            <label htmlFor="title">제목</label>
-            <input id="title" defaultValue={ event ? event.title: '' } name="title" required />
-          </div>
-          <div>
-            <DateTime
-              defaultValue={ start }
-              dateFormat="YYYY-MM-DD"
-              timeFormat="HH:mm"
-              inputProps={{
-                name: 'start',
-                required: true
-              }}
+          <div className="mc-event-modal-title mb-10">
+            <Input
+              defaultValue={ event ? event.title: '' }
+              placeholder="일정 제목을 입력하세요."
+              name="title"
+              required
             />
-            <DateTime
-              defaultValue={ end }
-              dateFormat="YYYY-MM-DD"
-              timeFormat="HH:mm"
-              inputProps={{
-                name: 'end',
+          </div>
+
+          <div>
+            <RangePicker
+              startDefaultValue={moment(start).format('YYYY-MM-DD')}
+              startProps={{
+                placeholder: "YYYY-MM-dd",
+                name: "startDate",
                 required: true
               }}
+              startTimeDefaultValue={moment(start).format('HH:mm')}
+              startTimeProps={{
+                placeholder: "HH:mm",
+                name: "startTime",
+                required: true
+              }}
+              endDefaultValue={moment(end).format('YYYY-MM-DD')}
+              endProps={{
+                placeholder: "YYYY-MM-dd",
+                name: "endDate",
+                required: true
+              }}
+              endTimeDefaultValue={moment(end).format('HH:mm')}
+              endTimeProps={{
+                placeholder: "HH:mm",
+                name: "endTime",
+                required: true
+              }}
+              isTime
             />
           </div>
           <div className="btn-group">

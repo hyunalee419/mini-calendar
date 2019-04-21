@@ -2,8 +2,15 @@
   display: flex;
 
   input {
-    flex: 1;
     border-radius: 0;
+
+    &.mc-datepicker {
+      flex: 3;
+    }
+
+    &.mc-timepicker {
+      flex: 2;
+    }
 
     &:first-child {
       border-top-left-radius: 4px;
