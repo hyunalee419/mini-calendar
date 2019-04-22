@@ -15,11 +15,13 @@ export default class EventFormModal extends Component {
     date: PropTypes.objectOf(Date),
     onClose: PropTypes.func,
     onDelete: PropTypes.func,
-    onSubmit: PropTypes.func
+    onSubmit: PropTypes.func,
+    isEdit: PropTypes.bool
   }
 
   static defaultProps = {
     isOpen: false,
+    isEdit: false
   }
 
   handleSubmit = (e) => {
@@ -43,7 +45,7 @@ export default class EventFormModal extends Component {
   }
 
   render() {
-    const { isOpen, event, date, onClose } = this.props;
+    const { isOpen, event, date, onClose, isEdit } = this.props;
 
     const contentLabel = event && event.title ? '일정 수정' : '일정 등록';
 
@@ -66,52 +68,55 @@ export default class EventFormModal extends Component {
       >
         <h3>{ contentLabel }</h3>
         <hr />
-        <form onSubmit={this.handleSubmit}>
-          <div className="mc-event-modal-title mb-10">
-            <Input
-              defaultValue={ event ? event.title: '' }
-              placeholder="일정 제목을 입력하세요."
-              name="title"
-              required
-            />
-          </div>
 
-          <div>
-            <RangePicker
-              startDefaultValue={moment(start).format('YYYY-MM-DD')}
-              startProps={{
-                placeholder: "YYYY-MM-dd",
-                name: "startDate",
-                required: true
-              }}
-              startTimeDefaultValue={moment(start).format('HH:mm')}
-              startTimeProps={{
-                placeholder: "HH:mm",
-                name: "startTime",
-                required: true
-              }}
-              endDefaultValue={moment(end).format('YYYY-MM-DD')}
-              endProps={{
-                placeholder: "YYYY-MM-dd",
-                name: "endDate",
-                required: true
-              }}
-              endTimeDefaultValue={moment(end).format('HH:mm')}
-              endTimeProps={{
-                placeholder: "HH:mm",
-                name: "endTime",
-                required: true
-              }}
-              isTime
-            />
-          </div>
-          <div className="btn-group">
-            { event && <Button buttonType="danger" onClick={this.handleDelete}>삭제</Button> }
+        {(!isEdit || (isEdit && event)) && (
+          <form onSubmit={this.handleSubmit}>
+            <div className="mc-event-modal-title mb-10">
+              <Input
+                defaultValue={ event ? event.title: '' }
+                placeholder="일정 제목을 입력하세요."
+                name="title"
+                required
+              />
+            </div>
 
-            <Button onClick={onClose}>취소</Button>
-            <Button className="ml-5" buttonType="primary" type="submit">저장</Button>
-          </div>
-        </form>
+            <div>
+              <RangePicker
+                startDefaultValue={moment(start).format('YYYY-MM-DD')}
+                startProps={{
+                  placeholder: "YYYY-MM-dd",
+                  name: "startDate",
+                  required: true
+                }}
+                startTimeDefaultValue={moment(start).format('HH:mm')}
+                startTimeProps={{
+                  placeholder: "HH:mm",
+                  name: "startTime",
+                  required: true
+                }}
+                endDefaultValue={moment(end).format('YYYY-MM-DD')}
+                endProps={{
+                  placeholder: "YYYY-MM-dd",
+                  name: "endDate",
+                  required: true
+                }}
+                endTimeDefaultValue={moment(end).format('HH:mm')}
+                endTimeProps={{
+                  placeholder: "HH:mm",
+                  name: "endTime",
+                  required: true
+                }}
+                isTime
+              />
+            </div>
+            <div className="btn-group">
+              { event && <Button buttonType="danger" onClick={this.handleDelete}>삭제</Button> }
+
+              <Button onClick={onClose}>취소</Button>
+              <Button className="ml-5" buttonType="primary" type="submit">저장</Button>
+            </div>
+          </form>
+        )}
       </Modal>
     )
   }

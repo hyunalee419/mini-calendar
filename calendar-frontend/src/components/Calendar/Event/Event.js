@@ -14,9 +14,13 @@ const Event = ({
     if (onClick) onClick({ id, title, start, end });
   }
 
+  function handleDrag(e) {
+    e.dataTransfer.setData("mcEventData", JSON.stringify({ id, title, start, end }));
+  }
+
   const hours = new Date(start).getHours();
   return (
-    <div className="mc-segment">
+    <div className="mc-segment" draggable="true" onDragStart={handleDrag}>
       <button className="mc-event" onClick={handleClick}>
         <div className="mc-event-content" title={title}>{hours}시 {title}</div>
       </button>
@@ -25,7 +29,7 @@ const Event = ({
 }
 
 export const EventType = {
-  id: PropTypes.number,
+  id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   start: PropTypes.string.isRequired,
   end: PropTypes.string.isRequired,

@@ -15,7 +15,8 @@ export default class Month extends Component {
     month: PropTypes.number.isRequired, // month index
     events: PropTypes.arrayOf(PropTypes.shape(EventType)),
     onClickDay: PropTypes.func,
-    onClickEvent: PropTypes.func
+    onClickEvent: PropTypes.func,
+    onDropEvent: PropTypes.func
   }
 
   filterEvents = () => {
@@ -32,7 +33,7 @@ export default class Month extends Component {
   }
 
   renderContents = () => {
-    const { year, month, onClickDay, onClickEvent } = this.props;
+    const { year, month, onClickDay, onClickEvent, onDropEvent } = this.props;
     const Days = daysInMonth(year, month)
       , FirstDay = firstDayInMonth(year, month)
       , BeforeDays = beforeDaysInMonth(year, month);
@@ -52,16 +53,16 @@ export default class Month extends Component {
         if (j === FirstDay || (day > 1 && day <= Days)) {
           date = day;
           day++;
-          currDate = new Date(year, month, date + 1);
+          currDate = new Date(year, month, date);
         } else if (day <= 1) {
           date = BeforeDays - FirstDay - (-j) + 1;
           isOff = true;
-          currDate = new Date(year, month - 1, date + 1);
+          currDate = new Date(year, month - 1, date);
         } else {
           date = day - Days;
           day++;
           isOff = true;
-          currDate = new Date(year, month + 1, date + 1);
+          currDate = new Date(year, month + 1, date);
         }
 
         const dayEvents = events && events.filter((event) => {
@@ -77,6 +78,7 @@ export default class Month extends Component {
             events={dayEvents}
             onClick={handleClickDay}
             onClickEvent={onClickEvent}
+            onDropEvent={onDropEvent}
             isOff={isOff}
           />
         );
