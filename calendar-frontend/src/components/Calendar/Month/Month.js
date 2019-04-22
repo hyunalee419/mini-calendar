@@ -40,8 +40,6 @@ export default class Month extends Component {
 
     const events = this.filterEvents();
 
-    const handleClickDay = (date) => onClickDay(year, month, date);
-
     const _contents = [];
     let day = 1
       , currDate;
@@ -76,7 +74,7 @@ export default class Month extends Component {
             month={currDate.getMonth()}
             date={date}
             events={dayEvents}
-            onClick={handleClickDay}
+            onClick={onClickDay}
             onClickEvent={onClickEvent}
             onDropEvent={onDropEvent}
             isOff={isOff}
