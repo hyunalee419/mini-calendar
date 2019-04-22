@@ -11,6 +11,7 @@ export default class Day extends Component {
     events: PropTypes.arrayOf(PropTypes.shape(EventType)),
     onClick: PropTypes.func,
     onClickEvent: PropTypes.func,
+    onDropEvent: PropTypes.func,
     isOff: PropTypes.bool
   }
 
@@ -27,6 +28,20 @@ export default class Day extends Component {
     if (onClick) onClick(date);
   }
 
+  allowDrop(e) {
+    e.preventDefault();
+  }
+
+  handleDrop = (e) => {
+    e.preventDefault();
+    let data = e.dataTransfer.getData("mcEventData");
+
+    e.dataTransfer.clearData();
+
+    const { year, month, date, onDropEvent } = this.props;
+    if (onDropEvent) onDropEvent(JSON.parse(data), new Date(year, month, date));
+  }
+
   render() {
     const {
       date, events, onClickEvent, isOff
@@ -34,7 +49,7 @@ export default class Day extends Component {
 
     const _events = events && events.map((event, i) => <Event key={`event-date-${i}`} onClick={onClickEvent} {...event} />);
     return (
-      <div className={`mc-day ${isOff ? 'mc-day-off' : ''}`} onClick={this.handleClick}>
+      <div className={`mc-day ${isOff ? 'mc-day-off' : ''}`} onClick={this.handleClick} onDrop={this.handleDrop} onDragOver={this.allowDrop}>
         <div>{date}</div>
         {_events}
       </div>
