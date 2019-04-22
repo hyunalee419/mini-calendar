@@ -41,10 +41,10 @@ class App extends Component {
     return events;
   };
 
-  handleClickDay = (year, month, date) => {
+  handleClickDay = (date) => {
     this.setState({
       isModal: true,
-      clickDay: new Date(year, month, date)
+      clickDay: date
     });
   }
 

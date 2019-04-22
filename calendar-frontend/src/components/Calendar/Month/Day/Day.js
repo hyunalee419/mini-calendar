@@ -24,8 +24,8 @@ export default class Day extends Component {
   }
 
   handleClick = () => {
-    const { onClick, date } = this.props;
-    if (onClick) onClick(date);
+    const { onClick, year, month, date } = this.props;
+    if (onClick) onClick(new Date(year, month, date));
   }
 
   allowDrop(e) {
