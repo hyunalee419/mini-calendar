@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from "moment";
+import moment from 'moment';
 import Modal from 'react-modal';
-import Button from 'components/common/Button';
-import Input from 'components/common/Input';
-import RangePicker from "../common/RangePicker/RangePicker";
-import { EventType } from "../Calendar/Event";
+import { Button, Input, RangePicker } from 'components/common';
+import { EventType } from 'components/Calendar/Event';
 import './EventFormModal.scss';
 
 export default class EventFormModal extends Component {
@@ -54,9 +52,18 @@ export default class EventFormModal extends Component {
       start = new Date(event.start);
       end = new Date(event.end);
     } else {
-      start = date ? date : new Date();
-      end = date ? new Date(date.getTime()) : new Date();
+      start = new Date();
+      end = new Date();
       end.setHours(end.getHours() + 1);
+
+      if (date) {
+        start.setFullYear(date.getFullYear());
+        start.setMonth(date.getMonth());
+        start.setDate(date.getDate());
+        end.setFullYear(date.getFullYear());
+        end.setMonth(date.getMonth());
+        end.setDate(date.getDate());
+      }
     }
 
     return (
@@ -98,7 +105,7 @@ export default class EventFormModal extends Component {
                 endProps={{
                   placeholder: "YYYY-MM-dd",
                   name: "endDate",
-                  required: true
+                  required: true,
                 }}
                 endTimeDefaultValue={moment(end).format('HH:mm')}
                 endTimeProps={{
@@ -107,6 +114,7 @@ export default class EventFormModal extends Component {
                   required: true
                 }}
                 isTime
+                isSameDate
               />
             </div>
             <div className="btn-group">

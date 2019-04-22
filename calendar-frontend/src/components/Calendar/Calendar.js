@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Toolbar from './Toolbar';
 import Month from './Month';
 import { EventType } from './Event';
-import { CALENDAR_TYPE } from '../../utils/enums';
+import { CALENDAR_TYPE } from 'utils/enums';
 import './Calendar.scss';
 
 export default class Calendar extends Component {

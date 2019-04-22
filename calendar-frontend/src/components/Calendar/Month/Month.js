@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Header from '../Header';
-import DayRow from './DayRow/DayRow';
+import moment from 'moment-timezone';
+import Header from 'components/Calendar/Header';
+import { EventType } from 'components/Calendar/Event';
+import DayRow from './DayRow';
 import Day from './Day';
-import { EventType } from '../Event';
-import './Month.scss';
 import {
   beforeDaysInMonth, daysInMonth, firstDayInMonth
-} from '../../../utils/dates';
+} from 'utils/dates';
+import './Month.scss';
 
 export default class Month extends Component {
   static propTypes = {
@@ -65,7 +66,7 @@ export default class Month extends Component {
 
         const dayEvents = events && events.filter((event) => {
           const start = new Date(event.start);
-          return start.toISOString().slice(0, 10) === currDate.toISOString().slice(0, 10);
+          return moment.tz(start, 'Asia/Seoul').format('YYYY-MM-DD') === moment.tz(currDate, 'Asia/Seoul').format('YYYY-MM-DD');
         });
         _cols.push(
           <Day

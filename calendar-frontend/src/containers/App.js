@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import moment from 'moment-timezone';
 import Calendar from 'components/Calendar';
 import EventFormModal from 'components/EventFormModal';
-import moment from "moment-timezone";
 
 const API_HOST = 'http://localhost:8000';
 
