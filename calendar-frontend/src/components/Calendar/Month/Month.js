@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment-timezone';
 import Header from 'components/Calendar/Header';
 import { EventType } from 'components/Calendar/Event';
 import DayRow from './DayRow';
@@ -65,7 +66,7 @@ export default class Month extends Component {
 
         const dayEvents = events && events.filter((event) => {
           const start = new Date(event.start);
-          return start.toISOString().slice(0, 10) === currDate.toISOString().slice(0, 10);
+          return moment.tz(start, 'Asia/Seoul').format('YYYY-MM-DD') === moment.tz(currDate, 'Asia/Seoul').format('YYYY-MM-DD');
         });
         _cols.push(
           <Day

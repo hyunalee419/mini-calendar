@@ -22,7 +22,9 @@ export default class RangePicker extends Component {
     endTimeValue: PropTypes.string,
     endTimeDefaultValue: PropTypes.string,
     startTimeProps: PropTypes.any,
-    endTimeProps: PropTypes.any
+    endTimeProps: PropTypes.any,
+
+    isSameDate: PropTypes.bool
   }
 
   static defaultProps = {
@@ -32,7 +34,8 @@ export default class RangePicker extends Component {
     endDefaultValue: undefined,
     className: '',
     style: undefined,
-    isTime: false
+    isTime: false,
+    isSameDate: false
   }
 
   startValue = undefined;
@@ -58,11 +61,16 @@ export default class RangePicker extends Component {
 
   handleChange = (type) => (e) => {
     const {
-      onChange, startDefaultValue, endDefaultValue, startTimeDefaultValue, endTimeDefaultValue
+      onChange, startDefaultValue, endDefaultValue, startTimeDefaultValue, endTimeDefaultValue,
+      isSameDate
     } = this.props;
     const { value } = e.target;
 
     this[`${type}Value`] = value;
+
+    if (isSameDate) {
+      this.endValue = this.startValue;
+    }
 
     let start = `${this.startValue} ${this.startTimeValue}`
       , end = `${this.endValue} ${this.endTimeValue}`;
@@ -109,7 +117,7 @@ export default class RangePicker extends Component {
       startProps, endProps,
       startTimeValue, endTimeValue, startTimeDefaultValue, endTimeDefaultValue,
       startTimeProps, endTimeProps,
-      className, style, isTime
+      className, style, isTime, isSameDate
     } = this.props;
     const {
       startValue: stateStartValue,
@@ -135,6 +143,7 @@ export default class RangePicker extends Component {
         <DatePicker
           value={ (endDefaultValue || !endValue) ? stateEndValue : endValue }
           onChange={this.handleChange('end')}
+          disabled={isSameDate}
           {...endProps}
         />
         { isTime && (

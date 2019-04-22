@@ -52,9 +52,18 @@ export default class EventFormModal extends Component {
       start = new Date(event.start);
       end = new Date(event.end);
     } else {
-      start = date ? date : new Date();
-      end = date ? new Date(date.getTime()) : new Date();
+      start = new Date();
+      end = new Date();
       end.setHours(end.getHours() + 1);
+
+      if (date) {
+        start.setFullYear(date.getFullYear());
+        start.setMonth(date.getMonth());
+        start.setDate(date.getDate());
+        end.setFullYear(date.getFullYear());
+        end.setMonth(date.getMonth());
+        end.setDate(date.getDate());
+      }
     }
 
     return (
@@ -96,7 +105,7 @@ export default class EventFormModal extends Component {
                 endProps={{
                   placeholder: "YYYY-MM-dd",
                   name: "endDate",
-                  required: true
+                  required: true,
                 }}
                 endTimeDefaultValue={moment(end).format('HH:mm')}
                 endTimeProps={{
@@ -105,6 +114,7 @@ export default class EventFormModal extends Component {
                   required: true
                 }}
                 isTime
+                isSameDate
               />
             </div>
             <div className="btn-group">
