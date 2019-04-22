@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Button from '../../common/Button';
-import { CALENDAR_TYPE } from '../../../utils/enums';
+import Button from 'components/common/Button';
+import { CALENDAR_TYPE } from 'utils/enums';
 import './Toolbar.scss';
 
 export default class Toolbar extends Component {

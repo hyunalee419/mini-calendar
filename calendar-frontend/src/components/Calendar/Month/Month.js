@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Header from '../Header';
-import DayRow from './DayRow/DayRow';
+import Header from 'components/Calendar/Header';
+import { EventType } from 'components/Calendar/Event';
+import DayRow from './DayRow';
 import Day from './Day';
-import { EventType } from '../Event';
-import './Month.scss';
 import {
   beforeDaysInMonth, daysInMonth, firstDayInMonth
-} from '../../../utils/dates';
+} from 'utils/dates';
+import './Month.scss';
 
 export default class Month extends Component {
   static propTypes = {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Event, { EventType } from '../../Event';
+import Event, { EventType } from 'components/Calendar/Event';
 import './Day.scss';
 
 export default class Day extends Component {

@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from "moment";
+import moment from 'moment';
 import Modal from 'react-modal';
-import Button from 'components/common/Button';
-import Input from 'components/common/Input';
-import RangePicker from "../common/RangePicker/RangePicker";
-import { EventType } from "../Calendar/Event";
+import { Button, Input, RangePicker } from 'components/common';
+import { EventType } from 'components/Calendar/Event';
 import './EventFormModal.scss';
 
 export default class EventFormModal extends Component {
