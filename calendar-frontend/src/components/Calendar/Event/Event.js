@@ -2,8 +2,6 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import './Event.scss';
 
-const uuidv1 = require('uuid/v1');
-
 const Event = ({
   id,
   title,
@@ -17,13 +15,12 @@ const Event = ({
   }
 
   function handleDrag(e) {
-    e.dataTransfer.setData("mcEvent", e.target.id);
     e.dataTransfer.setData("mcEventData", JSON.stringify({ id, title, start, end }));
   }
 
   const hours = new Date(start).getHours();
   return (
-    <div className="mc-segment" draggable="true" onDragStart={handleDrag} id={uuidv1()}>
+    <div className="mc-segment" draggable="true" onDragStart={handleDrag}>
       <button className="mc-event" onClick={handleClick}>
         <div className="mc-event-content" title={title}>{hours}시 {title}</div>
       </button>

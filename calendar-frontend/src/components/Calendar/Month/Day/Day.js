@@ -34,9 +34,9 @@ export default class Day extends Component {
 
   handleDrop = (e) => {
     e.preventDefault();
-    let id = e.dataTransfer.getData("mcEvent");
     let data = e.dataTransfer.getData("mcEventData");
-    e.target.appendChild(document.getElementById(id));
+
+    e.dataTransfer.clearData();
 
     const { year, month, date, onDropEvent } = this.props;
     if (onDropEvent) onDropEvent(JSON.parse(data), new Date(year, month, date));

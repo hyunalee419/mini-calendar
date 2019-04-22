@@ -8,12 +8,12 @@ const API_HOST = 'http://localhost:8000';
 
 class App extends Component {
   state = {
-    events: undefined,
-    isModal: false
+    events: null,
+    isModal: false,
+    event: null,
+    isEdit: false,
+    clickDay: null
   }
-
-  event = undefined;
-  clickDay = undefined;
 
   componentDidMount() {
     this.getEvents();
@@ -30,30 +30,33 @@ class App extends Component {
     }
   }
 
-  updateStateEvent = (id, data) => {
+  updateStateEvent = (data) => {
     const { events } = this.state;
     for (let i = 0; events && i < events.length; i++) {
-      if (events[i].id === id) {
-        events[i] = {
-          id,
-          ...data
-        };
+      if (events[i].id === data.id) {
+        events[i] = {...data};
         break;
       }
     }
     return events;
-  }
+  };
 
   handleClickDay = (year, month, date) => {
-    this.clickDay = new Date(year, month, date);
-    this.setState({ isModal: true });
+    this.setState({
+      isModal: true,
+      clickDay: new Date(year, month, date)
+    });
   }
 
-  handleClickEvent = ({ id, title, start, end }) => {
-    this.event = {
-      id, title, start, end
+  handleClickEvent = async ({ id }) => {
+    this.setState({ isModal: true, isEdit: true });
+    try {
+      const response = await axios.get(`${API_HOST}/events/${id}`);
+      const { data: event } = response;
+      this.setState({ event });
+    } catch (e) {
+      alert(e.toString());
     }
-    this.setState({ isModal: true });
   }
 
   handleDropEvent = (event, date) => {
@@ -68,25 +71,22 @@ class App extends Component {
       axios.put(`${API_HOST}/events/${event.id}`, event);
       alert("성공적으로 저장되었습니다.");
 
-      const { id, ...data } = event;
-      const events = this.updateStateEvent(id, data);
-      this.setState({ events: events.slice() });
+      const events = this.updateStateEvent(event);
+      this.setState({ events: events ? [...events] : null });
     } catch (e) {
       alert(e.toString());
     }
   }
 
-  handleCancel = (e) => {
-    this.title = this.start = this.end = undefined;
-
+  handleCancel = () => {
     this.setState({
       isModal: false,
+      event: null,
+      isEdit: false
     });
   }
 
   handleDelete = (event) => {
-    this.clickDay = this.event = undefined;
-
     try {
       axios.delete(`${API_HOST}/events/${event.id}`);
       // TODO: change toast
@@ -95,7 +95,10 @@ class App extends Component {
       const { events } = this.state;
       this.setState({
         isModal: false,
-        events: events.filter((item) => item.id !== event.id)
+        events: events.filter((item) => item.id !== event.id),
+        event: null,
+        isEdit: false,
+        clickDay: null
       })
     } catch (e) {
       alert(e.toString())
@@ -103,12 +106,12 @@ class App extends Component {
   }
 
   handleSubmit = async (data) => {
-    const method = this.event ? 'PUT' : 'POST'
-      , id = this.event ? this.event.id : '';
-    this.clickDay = this.event = undefined;
+    const { event } = this.state;
+    const method = event ? 'PUT' : 'POST'
+      , id = event ? event.id : '';
 
     try {
-      await axios({
+      const response = await axios({
         method,
         url: `${API_HOST}/events${method === 'PUT' ? `/${id}` : ''}`,
         data
@@ -116,20 +119,26 @@ class App extends Component {
       // TODO: change toast
       alert('성공적으로 저장되었습니다.');
 
+      const { data: newEvent } = response;
       let { events } = this.state;
       if ( method === 'POST' ) {
-        events.push(data);
+        events.push(newEvent);
       } else {
-        events = this.updateStateEvent(id, data);
+        events = this.updateStateEvent(newEvent);
       }
-      this.setState({ isModal: false, events: events.slice() });
+      this.setState({
+        isModal: false,
+        events: events ? [...events] : null,
+        event: null,
+        isEdit: false
+      });
     } catch (e) {
       alert(e.toString());
     }
   }
 
   render() {
-    const { events, isModal } = this.state;
+    const { events, isModal, event, clickDay, isEdit } = this.state;
     return (
       <>
         <Calendar
@@ -142,11 +151,12 @@ class App extends Component {
         { isModal && (
           <EventFormModal
             isOpen={isModal}
-            event={this.event}
-            date={this.clickDay}
+            event={event}
+            date={clickDay}
             onClose={this.handleCancel}
             onDelete={this.handleDelete}
             onSubmit={this.handleSubmit}
+            isEdit={isEdit}
           />
         )}
       </>
