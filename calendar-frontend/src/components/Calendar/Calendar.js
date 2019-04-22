@@ -70,7 +70,7 @@ export default class Calendar extends Component {
               onClickEvent={onClickEvent}
               onDropEvent={onDropEvent}
             />
-          ) : null
+          ) : <div>개발중입니다..T.T</div>
         }
       </div>
     )
