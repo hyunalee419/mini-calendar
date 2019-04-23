@@ -30,13 +30,14 @@ export default class EventFormModal extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    let {
-      title, startDate, startTime, endDate, endTime
+    let { title } = e.target;
+    const {
+      startDate, startTime, endDate, endTime,
     } = e.target;
 
     title = title.value;
-    let start = `${startDate.value} ${startTime.value}`;
-    let end = `${endDate.value} ${endTime.value}`;
+    const start = `${startDate.value} ${startTime.value}`;
+    const end = `${endDate.value} ${endTime.value}`;
 
     const { onSubmit } = this.props;
     if (onSubmit) onSubmit({ title, start, end });
@@ -89,7 +90,7 @@ export default class EventFormModal extends Component {
           <form onSubmit={this.handleSubmit}>
             <div className="mc-event-modal-title mb-10">
               <Input
-                defaultValue={ event ? event.title: '' }
+                defaultValue={event ? event.title : ''}
                 placeholder="일정 제목을 입력하세요."
                 name="title"
                 required
@@ -100,27 +101,27 @@ export default class EventFormModal extends Component {
               <RangePicker
                 startDefaultValue={moment(start).format('YYYY-MM-DD')}
                 startProps={{
-                  placeholder: "YYYY-MM-dd",
-                  name: "startDate",
-                  required: true
+                  placeholder: 'YYYY-MM-dd',
+                  name: 'startDate',
+                  required: true,
                 }}
                 startTimeDefaultValue={moment(start).format('HH:mm')}
                 startTimeProps={{
-                  placeholder: "HH:mm",
-                  name: "startTime",
-                  required: true
+                  placeholder: 'HH:mm',
+                  name: 'startTime',
+                  required: true,
                 }}
                 endDefaultValue={moment(end).format('YYYY-MM-DD')}
                 endProps={{
-                  placeholder: "YYYY-MM-dd",
-                  name: "endDate",
+                  placeholder: 'YYYY-MM-dd',
+                  name: 'endDate',
                   required: true,
                 }}
                 endTimeDefaultValue={moment(end).format('HH:mm')}
                 endTimeProps={{
-                  placeholder: "HH:mm",
-                  name: "endTime",
-                  required: true
+                  placeholder: 'HH:mm',
+                  name: 'endTime',
+                  required: true,
                 }}
                 isTime
                 isSameDate

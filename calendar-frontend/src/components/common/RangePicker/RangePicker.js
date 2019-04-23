@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import StylePropType from 'react-style-proptype';
 import DatePicker from '../DatePicker';
 import TimePicker from '../TimePicker';
 import './RangePicker.scss';
@@ -14,7 +15,7 @@ export default class RangePicker extends Component {
     startProps: PropTypes.any,
     endProps: PropTypes.any,
     className: PropTypes.string,
-    style: PropTypes.any,
+    style: StylePropType,
 
     isTime: PropTypes.bool,
     startTimeValue: PropTypes.string,
@@ -33,6 +34,8 @@ export default class RangePicker extends Component {
     endValue: undefined,
     endDefaultValue: undefined,
     onChange: undefined,
+    startProps: undefined,
+    endProps: undefined,
     className: '',
     style: undefined,
 
@@ -45,11 +48,6 @@ export default class RangePicker extends Component {
     endTimeProps: undefined,
     isSameDate: false,
   }
-
-  startValue = undefined;
-  endValue = undefined;
-  startTimeValue = undefined;
-  endTimeValue = undefined;
 
   constructor(props) {
     super(props);
@@ -69,7 +67,7 @@ export default class RangePicker extends Component {
     this.endTimeValue = endTimeValue || props.endTimeDefaultValue;
   }
 
-  handleChange = type => e => {
+  handleChange = type => (e) => {
     const {
       onChange, startDefaultValue, endDefaultValue, startTimeDefaultValue, endTimeDefaultValue,
       isSameDate,

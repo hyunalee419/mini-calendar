@@ -27,8 +27,10 @@
     }],
     "react/jsx-one-expression-per-line": "none",
     "one-var": "off",
+    "one-var-declaration-per-line": "off",
     "no-loop-func": "off",
-    "no-case-declarations": "off"
+    "no-case-declarations": "off",
+    "react/forbid-prop-types": "ignore"
   },
   "plugins": ["import"]
 }
