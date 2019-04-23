@@ -14,18 +14,25 @@ export default class EventFormModal extends Component {
     onClose: PropTypes.func,
     onDelete: PropTypes.func,
     onSubmit: PropTypes.func,
-    isEdit: PropTypes.bool
+    isEdit: PropTypes.bool,
   }
 
   static defaultProps = {
     isOpen: false,
-    isEdit: false
+    event: null,
+    date: null,
+    onClose: undefined,
+    onDelete: undefined,
+    onSubmit: undefined,
+    isEdit: false,
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
 
-    let { title, startDate, startTime, endDate, endTime } = e.target;
+    let {
+      title, startDate, startTime, endDate, endTime
+    } = e.target;
 
     title = title.value;
     let start = `${startDate.value} ${startTime.value}`;
@@ -43,7 +50,9 @@ export default class EventFormModal extends Component {
   }
 
   render() {
-    const { isOpen, event, date, onClose, isEdit } = this.props;
+    const {
+      isOpen, event, date, onClose, isEdit,
+    } = this.props;
 
     const contentLabel = event && event.title ? '일정 수정' : '일정 등록';
 
@@ -73,7 +82,7 @@ export default class EventFormModal extends Component {
         onRequestClose={onClose}
         contentLabel={contentLabel}
       >
-        <h3>{ contentLabel }</h3>
+        <h3>{contentLabel}</h3>
         <hr />
 
         {(!isEdit || (isEdit && event)) && (
@@ -118,7 +127,7 @@ export default class EventFormModal extends Component {
               />
             </div>
             <div className="btn-group">
-              { event && <Button buttonType="danger" onClick={this.handleDelete}>삭제</Button> }
+              {event && <Button buttonType="danger" onClick={this.handleDelete}>삭제</Button>}
 
               <Button onClick={onClose}>취소</Button>
               <Button className="ml-5" buttonType="primary" type="submit">저장</Button>
@@ -126,7 +135,7 @@ export default class EventFormModal extends Component {
           </form>
         )}
       </Modal>
-    )
+    );
   }
 }
 

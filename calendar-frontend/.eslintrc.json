@@ -27,7 +27,8 @@
     }],
     "react/jsx-one-expression-per-line": "none",
     "one-var": "off",
-    "no-loop-func": "off"
+    "no-loop-func": "off",
+    "no-case-declarations": "off"
   },
   "plugins": ["import"]
 }

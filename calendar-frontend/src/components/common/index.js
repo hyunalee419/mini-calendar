@@ -9,5 +9,5 @@ export {
   DatePicker,
   Input,
   RangePicker,
-  TimePicker
+  TimePicker,
 };
