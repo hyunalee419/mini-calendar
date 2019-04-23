@@ -14,22 +14,30 @@ export default class EventFormModal extends Component {
     onClose: PropTypes.func,
     onDelete: PropTypes.func,
     onSubmit: PropTypes.func,
-    isEdit: PropTypes.bool
+    isEdit: PropTypes.bool,
   }
 
   static defaultProps = {
     isOpen: false,
-    isEdit: false
+    event: null,
+    date: null,
+    onClose: undefined,
+    onDelete: undefined,
+    onSubmit: undefined,
+    isEdit: false,
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
 
-    let { title, startDate, startTime, endDate, endTime } = e.target;
+    let { title } = e.target;
+    const {
+      startDate, startTime, endDate, endTime,
+    } = e.target;
 
     title = title.value;
-    let start = `${startDate.value} ${startTime.value}`;
-    let end = `${endDate.value} ${endTime.value}`;
+    const start = `${startDate.value} ${startTime.value}`;
+    const end = `${endDate.value} ${endTime.value}`;
 
     const { onSubmit } = this.props;
     if (onSubmit) onSubmit({ title, start, end });
@@ -43,7 +51,9 @@ export default class EventFormModal extends Component {
   }
 
   render() {
-    const { isOpen, event, date, onClose, isEdit } = this.props;
+    const {
+      isOpen, event, date, onClose, isEdit,
+    } = this.props;
 
     const contentLabel = event && event.title ? '일정 수정' : '일정 등록';
 
@@ -73,14 +83,14 @@ export default class EventFormModal extends Component {
         onRequestClose={onClose}
         contentLabel={contentLabel}
       >
-        <h3>{ contentLabel }</h3>
+        <h3>{contentLabel}</h3>
         <hr />
 
         {(!isEdit || (isEdit && event)) && (
           <form onSubmit={this.handleSubmit}>
             <div className="mc-event-modal-title mb-10">
               <Input
-                defaultValue={ event ? event.title: '' }
+                defaultValue={event ? event.title : ''}
                 placeholder="일정 제목을 입력하세요."
                 name="title"
                 required
@@ -91,34 +101,34 @@ export default class EventFormModal extends Component {
               <RangePicker
                 startDefaultValue={moment(start).format('YYYY-MM-DD')}
                 startProps={{
-                  placeholder: "YYYY-MM-dd",
-                  name: "startDate",
-                  required: true
+                  placeholder: 'YYYY-MM-dd',
+                  name: 'startDate',
+                  required: true,
                 }}
                 startTimeDefaultValue={moment(start).format('HH:mm')}
                 startTimeProps={{
-                  placeholder: "HH:mm",
-                  name: "startTime",
-                  required: true
+                  placeholder: 'HH:mm',
+                  name: 'startTime',
+                  required: true,
                 }}
                 endDefaultValue={moment(end).format('YYYY-MM-DD')}
                 endProps={{
-                  placeholder: "YYYY-MM-dd",
-                  name: "endDate",
+                  placeholder: 'YYYY-MM-dd',
+                  name: 'endDate',
                   required: true,
                 }}
                 endTimeDefaultValue={moment(end).format('HH:mm')}
                 endTimeProps={{
-                  placeholder: "HH:mm",
-                  name: "endTime",
-                  required: true
+                  placeholder: 'HH:mm',
+                  name: 'endTime',
+                  required: true,
                 }}
                 isTime
                 isSameDate
               />
             </div>
             <div className="btn-group">
-              { event && <Button buttonType="danger" onClick={this.handleDelete}>삭제</Button> }
+              {event && <Button buttonType="danger" onClick={this.handleDelete}>삭제</Button>}
 
               <Button onClick={onClose}>취소</Button>
               <Button className="ml-5" buttonType="primary" type="submit">저장</Button>
@@ -126,7 +136,7 @@ export default class EventFormModal extends Component {
           </form>
         )}
       </Modal>
-    )
+    );
   }
 }
 

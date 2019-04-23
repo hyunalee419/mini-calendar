@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import Header from 'components/Calendar/Header';
 import { EventType } from 'components/Calendar/Event';
+import {
+  beforeDaysInMonth, daysInMonth, firstDayInMonth,
+} from 'utils/dates';
 import DayRow from './DayRow';
 import Day from './Day';
-import {
-  beforeDaysInMonth, daysInMonth, firstDayInMonth
-} from 'utils/dates';
 import './Month.scss';
 
 export default class Month extends Component {
@@ -17,41 +17,50 @@ export default class Month extends Component {
     events: PropTypes.arrayOf(PropTypes.shape(EventType)),
     onClickDay: PropTypes.func,
     onClickEvent: PropTypes.func,
-    onDropEvent: PropTypes.func
+    onDropEvent: PropTypes.func,
+  }
+
+  static defaultProps = {
+    events: null,
+    onClickDay: undefined,
+    onClickEvent: undefined,
+    onDropEvent: undefined,
   }
 
   filterEvents = () => {
     const { events, year, month } = this.props;
-    const start = new Date(year, month-1, 21)
-      , end = new Date(year, month+1, 7);
+    const start = new Date(year, month - 1, 21);
+    const end = new Date(year, month + 1, 7);
 
     return events && events.filter((event) => {
-      const eventStart = new Date(event.start)
-        , eventEnd = new Date(event.end);
+      const eventStart = new Date(event.start);
+      const eventEnd = new Date(event.end);
       return (start < eventStart && eventStart < end)
-        || (end < eventEnd && eventEnd < end)
+        || (end < eventEnd && eventEnd < end);
     });
   }
 
   renderContents = () => {
-    const { year, month, onClickDay, onClickEvent, onDropEvent } = this.props;
-    const Days = daysInMonth(year, month)
-      , FirstDay = firstDayInMonth(year, month)
-      , BeforeDays = beforeDaysInMonth(year, month);
+    const {
+      year, month, onClickDay, onClickEvent, onDropEvent,
+    } = this.props;
+    const Days = daysInMonth(year, month),
+      FirstDay = firstDayInMonth(year, month),
+      BeforeDays = beforeDaysInMonth(year, month);
 
     const events = this.filterEvents();
 
-    const _contents = [];
-    let day = 1
-      , currDate;
+    const contents = [];
+    let day = 1,
+      currDate;
     for (let i = 0; day <= Days; i += 7) {
-      const _cols = [];
-      for (let j = i; j < i + 7; j++) {
-        let date
-          , isOff = false;
+      const cols = [];
+      for (let j = i; j < i + 7; j += 1) {
+        let date,
+          isOff = false;
         if (j === FirstDay || (day > 1 && day <= Days)) {
           date = day;
-          day++;
+          day += 1;
           currDate = new Date(year, month, date);
         } else if (day <= 1) {
           date = BeforeDays - FirstDay - (-j) + 1;
@@ -59,7 +68,7 @@ export default class Month extends Component {
           currDate = new Date(year, month - 1, date);
         } else {
           date = day - Days;
-          day++;
+          day += 1;
           isOff = true;
           currDate = new Date(year, month + 1, date);
         }
@@ -68,7 +77,7 @@ export default class Month extends Component {
           const start = new Date(event.start);
           return moment.tz(start, 'Asia/Seoul').format('YYYY-MM-DD') === moment.tz(currDate, 'Asia/Seoul').format('YYYY-MM-DD');
         });
-        _cols.push(
+        cols.push(
           <Day
             key={`day-${date}`}
             year={currDate.getFullYear()}
@@ -79,13 +88,13 @@ export default class Month extends Component {
             onClickEvent={onClickEvent}
             onDropEvent={onDropEvent}
             isOff={isOff}
-          />
+          />,
         );
       }
-      _contents.push(<DayRow key={`day-row-${i/7}`}>{_cols}</DayRow>);
+      contents.push(<DayRow key={`day-row-${i / 7}`}>{cols}</DayRow>);
     }
 
-    return _contents;
+    return contents;
   }
 
   render() {
@@ -94,6 +103,6 @@ export default class Month extends Component {
         <Header />
         {this.renderContents()}
       </div>
-    )
+    );
   }
 }

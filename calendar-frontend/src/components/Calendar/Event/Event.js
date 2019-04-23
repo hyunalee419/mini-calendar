@@ -7,26 +7,39 @@ const Event = ({
   title,
   start,
   end,
-  onClick
+  onClick,
 }) => {
   function handleClick(e) {
     e.stopPropagation();
-    if (onClick) onClick({ id, title, start, end });
+    if (onClick) {
+      onClick({
+        id, title, start, end,
+      });
+    }
   }
 
   function handleDrag(e) {
-    e.dataTransfer.setData("mcEventData", JSON.stringify({ id, title, start, end }));
+    e.dataTransfer.setData(
+      'mcEventData',
+      JSON.stringify(
+        {
+          id, title, start, end,
+        },
+      ),
+    );
   }
 
   const hours = new Date(start).getHours();
   return (
     <div className="mc-segment" draggable="true" onDragStart={handleDrag}>
-      <button className="mc-event" onClick={handleClick}>
-        <div className="mc-event-content" title={title}>{hours}시 {title}</div>
+      <button type="button" className="mc-event" onClick={handleClick}>
+        <div className="mc-event-content" title={title}>
+          {hours}시 {title}
+        </div>
       </button>
     </div>
   );
-}
+};
 
 export const EventType = {
   id: PropTypes.number.isRequired,
@@ -37,7 +50,11 @@ export const EventType = {
 
 Event.propTypes = {
   ...EventType,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+};
+
+Event.defaultProps = {
+  onClick: undefined,
 };
 
 export default memo(Event);
