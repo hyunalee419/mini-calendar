@@ -25,7 +25,9 @@
       },
       "allowChildren": false
     }],
-    "react/jsx-one-expression-per-line": "none"
+    "react/jsx-one-expression-per-line": "none",
+    "one-var": "off",
+    "no-loop-func": "off"
   },
   "plugins": ["import"]
 }
