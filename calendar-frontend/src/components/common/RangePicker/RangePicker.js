@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import StylePropType from 'react-style-proptype';
+import moment from 'moment';
 import DatePicker from '../DatePicker';
 import TimePicker from '../TimePicker';
 import './RangePicker.scss';
@@ -74,7 +75,11 @@ export default class RangePicker extends Component {
     } = this.props;
     const { value } = e.target;
 
-    this[`${type}Value`] = value;
+    if (!value) {
+      this[`${type}Value`] = moment(this[`${type}Value`]).subtract(2, 'd').format('YYYY-MM-DD');
+    } else {
+      this[`${type}Value`] = value;
+    }
 
     if (isSameDate) {
       this.endValue = this.startValue;
