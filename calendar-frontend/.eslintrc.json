@@ -24,7 +24,8 @@
         "some": [ "nesting", "id" ]
       },
       "allowChildren": false
-    }]
+    }],
+    "react/jsx-one-expression-per-line": "none"
   },
   "plugins": ["import"]
 }
