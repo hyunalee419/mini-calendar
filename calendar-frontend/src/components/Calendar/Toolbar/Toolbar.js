@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Button from '../../common/Button';
-import { CALENDAR_TYPE } from '../../../utils/enums';
+import Button from 'components/common/Button';
+import { CALENDAR_TYPE } from 'utils/enums';
 import './Toolbar.scss';
 
 export default class Toolbar extends Component {
@@ -13,18 +13,23 @@ export default class Toolbar extends Component {
     onClickToday: PropTypes.func,
     onClickNext: PropTypes.func,
     onClickMonth: PropTypes.func,
-    onClickWeek: PropTypes.func
+    onClickWeek: PropTypes.func,
   }
 
   static defaultProps = {
-    type: CALENDAR_TYPE.month
+    type: CALENDAR_TYPE.month,
+    onClickPrev: undefined,
+    onClickToday: undefined,
+    onClickNext: undefined,
+    onClickMonth: undefined,
+    onClickWeek: undefined,
   }
 
   shouldComponentUpdate(nextProps) {
     return JSON.stringify(this.props) !== JSON.stringify(nextProps);
   }
 
-  handleClickNav = (type) => () => {
+  handleClickNav = type => () => {
     const { year, month } = this.props;
     const currDate = new Date(year, month);
 
@@ -55,7 +60,7 @@ export default class Toolbar extends Component {
     }
   }
 
-  handleClickCalendarType = (type) => () => {
+  handleClickCalendarType = type => () => {
     const funcProps = `onClick${type.charAt(0).toUpperCase() + type.slice(1)}`;
     const { [funcProps]: onClickFunc } = this.props;
 
@@ -76,19 +81,19 @@ export default class Toolbar extends Component {
         </span>
         <span className="btn-group">
           <Button
-            className={ type === CALENDAR_TYPE.month ? 'active' : '' }
+            className={type === CALENDAR_TYPE.month ? 'active' : ''}
             onClick={this.handleClickCalendarType(CALENDAR_TYPE.month)}
           >
             월간
           </Button>
           <Button
-            className={ type === CALENDAR_TYPE.week ? 'active' : '' }
+            className={type === CALENDAR_TYPE.week ? 'active' : ''}
             onClick={this.handleClickCalendarType(CALENDAR_TYPE.week)}
           >
             주간
           </Button>
         </span>
       </div>
-    )
+    );
   }
 }

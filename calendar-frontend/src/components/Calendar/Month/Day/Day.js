@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Event, { EventType } from '../../Event';
+import Event, { EventType } from 'components/Calendar/Event';
 import './Day.scss';
 
 export default class Day extends Component {
@@ -12,11 +12,15 @@ export default class Day extends Component {
     onClick: PropTypes.func,
     onClickEvent: PropTypes.func,
     onDropEvent: PropTypes.func,
-    isOff: PropTypes.bool
+    isOff: PropTypes.bool,
   }
 
   static defaultProps = {
-    isOff: false
+    events: null,
+    onClick: undefined,
+    onClickEvent: undefined,
+    onDropEvent: undefined,
+    isOff: false,
   }
 
   shouldComponentUpdate(nextProps) {
@@ -24,35 +28,41 @@ export default class Day extends Component {
   }
 
   handleClick = () => {
-    const { onClick, year, month, date } = this.props;
+    const {
+      onClick, year, month, date,
+    } = this.props;
     if (onClick) onClick(new Date(year, month, date));
-  }
-
-  allowDrop(e) {
-    e.preventDefault();
   }
 
   handleDrop = (e) => {
     e.preventDefault();
-    let data = e.dataTransfer.getData("mcEventData");
+    const data = e.dataTransfer.getData('mcEventData');
 
     e.dataTransfer.clearData();
 
-    const { year, month, date, onDropEvent } = this.props;
+    const {
+      year, month, date, onDropEvent,
+    } = this.props;
     if (onDropEvent) onDropEvent(JSON.parse(data), new Date(year, month, date));
+  }
+
+  allowDrop = (e) => {
+    e.preventDefault();
   }
 
   render() {
     const {
-      date, events, onClickEvent, isOff
+      date, events, onClickEvent, isOff,
     } = this.props;
 
-    const _events = events && events.map((event, i) => <Event key={`event-date-${i}`} onClick={onClickEvent} {...event} />);
+    const renderEvents = events && events.map(
+      event => <Event key={`event-date-${event.id}`} onClick={onClickEvent} {...event} />,
+    );
     return (
-      <div className={`mc-day ${isOff ? 'mc-day-off' : ''}`} onClick={this.handleClick} onDrop={this.handleDrop} onDragOver={this.allowDrop}>
+      <div className={`mc-day ${isOff ? 'mc-day-off' : ''}`} onClick={this.handleClick} onDrop={this.handleDrop} onDragOver={this.allowDrop} role="complementary">
         <div>{date}</div>
-        {_events}
+        {renderEvents}
       </div>
-    )
+    );
   }
 }

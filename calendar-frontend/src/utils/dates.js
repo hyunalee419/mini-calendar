@@ -5,7 +5,7 @@
  * @returns {number}
  */
 function daysInMonth(year, month) {
-  return 32 - new Date(year, month, 32).getDate()
+  return 32 - new Date(year, month, 32).getDate();
 }
 
 /**
@@ -15,7 +15,7 @@ function daysInMonth(year, month) {
  * @returns {number}
  */
 function firstDayInMonth(year, month) {
-  return new Date(year, month, 1).getDay()
+  return new Date(year, month, 1).getDay();
 }
 
 /**
@@ -25,7 +25,7 @@ function firstDayInMonth(year, month) {
  * @returns {number}
  */
 function beforeDaysInMonth(year, month) {
-  let today = new Date(year, month);
+  const today = new Date(year, month);
   today.setMonth(today.getMonth() - 1);
   return daysInMonth(today.getFullYear(), today.getMonth());
 }
@@ -33,5 +33,5 @@ function beforeDaysInMonth(year, month) {
 export {
   daysInMonth,
   firstDayInMonth,
-  beforeDaysInMonth
-}
+  beforeDaysInMonth,
+};

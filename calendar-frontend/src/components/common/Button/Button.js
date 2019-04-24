@@ -8,13 +8,20 @@ const Button = ({
   buttonType = 'default',
   ...props
 }) => (
-  <button className={`mini-calendar-button ${className} ${buttonType}`} {...props}>{children}</button>
+  <button type="button" className={`mini-calendar-button ${className} ${buttonType}`} {...props}>
+    {children}
+  </button>
 );
 
-Button.propsTypes = {
+Button.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
-  buttonType: PropTypes.oneOf(["default", "danger", "primary"])
+  buttonType: PropTypes.oneOf(['default', 'danger', 'primary']),
+};
+
+Button.defaultProps = {
+  className: '',
+  buttonType: 'default',
 };
 
 export default memo(Button);

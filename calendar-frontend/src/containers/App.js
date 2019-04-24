@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import moment from 'moment-timezone';
 import Calendar from 'components/Calendar';
 import EventFormModal from 'components/EventFormModal';
-import moment from "moment-timezone";
 
 const API_HOST = 'http://localhost:8000';
 
@@ -12,7 +12,7 @@ class App extends Component {
     isModal: false,
     event: null,
     isEdit: false,
-    clickDay: null
+    clickDay: null,
   }
 
   componentDidMount() {
@@ -32,9 +32,9 @@ class App extends Component {
 
   updateStateEvent = (data) => {
     const { events } = this.state;
-    for (let i = 0; events && i < events.length; i++) {
+    for (let i = 0; events && i < events.length; i += 1) {
       if (events[i].id === data.id) {
-        events[i] = {...data};
+        events[i] = { ...data };
         break;
       }
     }
@@ -44,7 +44,7 @@ class App extends Component {
   handleClickDay = (date) => {
     this.setState({
       isModal: true,
-      clickDay: date
+      clickDay: date,
     });
   }
 
@@ -59,17 +59,18 @@ class App extends Component {
     }
   }
 
-  handleDropEvent = (event, date) => {
+  handleDropEvent = (dropEvent, dropDate) => {
     const timezoneOffset = new Date().getTimezoneOffset() * 60000;
-    date = new Date(date - timezoneOffset);
+    const date = new Date(dropDate - timezoneOffset);
 
+    const event = { ...dropEvent };
     const yyyymmdd = date.toISOString().slice(0, 10);
     event.start = moment.tz(`${yyyymmdd} ${event.start.slice(11, 16)}`, 'Asia/Seoul').format();
     event.end = moment.tz(`${yyyymmdd} ${event.end.slice(11, 16)}`, 'Asia/Seoul').format();
 
     try {
       axios.put(`${API_HOST}/events/${event.id}`, event);
-      alert("성공적으로 저장되었습니다.");
+      alert('성공적으로 저장되었습니다.');
 
       const events = this.updateStateEvent(event);
       this.setState({ events: events ? [...events] : null });
@@ -82,7 +83,7 @@ class App extends Component {
     this.setState({
       isModal: false,
       event: null,
-      isEdit: false
+      isEdit: false,
     });
   }
 
@@ -95,33 +96,33 @@ class App extends Component {
       const { events } = this.state;
       this.setState({
         isModal: false,
-        events: events.filter((item) => item.id !== event.id),
+        events: events.filter(item => item.id !== event.id),
         event: null,
         isEdit: false,
-        clickDay: null
-      })
+        clickDay: null,
+      });
     } catch (e) {
-      alert(e.toString())
+      alert(e.toString());
     }
   }
 
   handleSubmit = async (data) => {
     const { event } = this.state;
-    const method = event ? 'PUT' : 'POST'
-      , id = event ? event.id : '';
+    const method = event ? 'PUT' : 'POST',
+      id = event ? event.id : '';
 
     try {
       const response = await axios({
         method,
         url: `${API_HOST}/events${method === 'PUT' ? `/${id}` : ''}`,
-        data
+        data,
       });
       // TODO: change toast
       alert('성공적으로 저장되었습니다.');
 
       const { data: newEvent } = response;
       let { events } = this.state;
-      if ( method === 'POST' ) {
+      if (method === 'POST') {
         events.push(newEvent);
       } else {
         events = this.updateStateEvent(newEvent);
@@ -130,7 +131,7 @@ class App extends Component {
         isModal: false,
         events: events ? [...events] : null,
         event: null,
-        isEdit: false
+        isEdit: false,
       });
     } catch (e) {
       alert(e.toString());
@@ -138,7 +139,9 @@ class App extends Component {
   }
 
   render() {
-    const { events, isModal, event, clickDay, isEdit } = this.state;
+    const {
+      events, isModal, event, clickDay, isEdit,
+    } = this.state;
     return (
       <>
         <Calendar

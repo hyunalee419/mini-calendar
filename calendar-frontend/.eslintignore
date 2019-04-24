@@ -1,0 +1,5 @@
+/node_modules/**
+/build/**
+/src/registerServiceWorker.js
+/src/**/*.test.js
+/src/__test__/**

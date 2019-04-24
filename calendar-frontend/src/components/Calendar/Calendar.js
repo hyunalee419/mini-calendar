@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { CALENDAR_TYPE } from 'utils/enums';
 import Toolbar from './Toolbar';
 import Month from './Month';
 import { EventType } from './Event';
-import { CALENDAR_TYPE } from '../../utils/enums';
 import './Calendar.scss';
 
 export default class Calendar extends Component {
@@ -12,12 +12,15 @@ export default class Calendar extends Component {
     events: PropTypes.arrayOf(PropTypes.shape(EventType)),
     onClickDay: PropTypes.func,
     onClickEvent: PropTypes.func,
-    onDropEvent: PropTypes.func
+    onDropEvent: PropTypes.func,
   }
 
   static defaultProps = {
     type: CALENDAR_TYPE.month,
-    events: null
+    events: null,
+    onClickDay: undefined,
+    onClickEvent: undefined,
+    onDropEvent: undefined,
   }
 
   constructor(props) {
@@ -27,13 +30,15 @@ export default class Calendar extends Component {
     this.state = {
       type: props.type,
       year: today.getFullYear(),
-      month: today.getMonth() // index (real, month: index + 1)
-    }
+      month: today.getMonth(), // index (real, month: index + 1)
+    };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.type !== nextProps.type) {
-      this.setState({ type: nextProps.type });
+    const { type: thisType } = this.props;
+    const { type } = nextProps;
+    if (thisType !== type) {
+      this.setState({ type });
     }
   }
 
@@ -46,7 +51,9 @@ export default class Calendar extends Component {
   }
 
   render() {
-    const { events, onClickDay, onClickEvent, onDropEvent } = this.props;
+    const {
+      events, onClickDay, onClickEvent, onDropEvent,
+    } = this.props;
     const { type, year, month } = this.state;
     return (
       <div className="mini-calendar">
@@ -73,6 +80,6 @@ export default class Calendar extends Component {
           ) : <div>개발중입니다..T.T</div>
         }
       </div>
-    )
+    );
   }
 }
